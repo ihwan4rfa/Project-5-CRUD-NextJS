@@ -11,13 +11,23 @@ const FoodForm = ({ isUpdate, detailFormData }) => {
         e.preventDefault();
         const apiUpdate = `https://api-bootcamp.do.dibimbing.id/api/v1/update-food/${router.query.id}`;
         const apiCreate = "https://api-bootcamp.do.dibimbing.id/api/v1/create-food";
+        const ingredientsArray = typeof (formData.ingredients) === 'string'
+            ? formData.ingredients.split(",").map(item => item.trim())
+            : formData.ingredients;
+        const validateUrl = (url) => {
+            if (!url.match(/^(http|https):\/\//)) {
+                return `https://${url}`
+            }
+            return url;
+        }
+
         const resp = await axios.post(
             isUpdate ? apiUpdate : apiCreate,
             {
                 name: formData.name,
-                imageUrl: formData.imageUrl,
                 description: formData.description,
-                ingredients: formData.ingredients.split(",").map(item => item.trim())
+                imageUrl: validateUrl(formData.imageUrl),
+                ingredients: ingredientsArray
             },
             {
                 headers: {
@@ -33,32 +43,32 @@ const FoodForm = ({ isUpdate, detailFormData }) => {
 
     return (
         <div className="w-full">
-            <form onSubmit={handleSubmit} className="flex flex-col">
+            <form onSubmit={handleSubmit} className="flex flex-col m-5">
                 <input
                     value={formData.name}
                     onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                    className="flex px-3 py-1 mx-5 my-2 mt-5 rounded-md text-slate-900"
+                    className="flex px-3 py-1 m-2 rounded-md text-slate-900"
                     placeholder="Nama Makanan"
                 />
                 <input
                     value={formData.description}
                     onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-                    className="flex px-3 py-1 mx-5 my-2 rounded-md text-slate-900"
+                    className="flex px-3 py-1 m-2 rounded-md text-slate-900"
                     placeholder="Deskripsi"
                 />
                 <input
                     value={formData.imageUrl}
                     onChange={(e) => setFormData((prev) => ({ ...prev, imageUrl: e.target.value }))}
-                    className="flex px-3 py-1 mx-5 my-2 rounded-md text-slate-900"
+                    className="flex px-3 py-1 m-2 rounded-md text-slate-900"
                     placeholder="Url Gambar"
                 />
                 <input
                     value={formData.ingredients}
                     onChange={(e) => setFormData((prev) => ({ ...prev, ingredients: e.target.value }))}
-                    className="flex px-3 py-1 mx-5 my-2 rounded-md text-slate-900"
+                    className="flex px-3 py-1 m-2 rounded-md text-slate-900"
                     placeholder="Bahan"
                 />
-                <button type="submit" className="px-4 py-1 mt-2 bg-green-500 rounded-md">
+                <button type="submit" className="px-4 py-1 m-2 bg-green-500 rounded-md w-fit">
                     {isUpdate ? "Update" : "Create"}
                 </button>
             </form>
