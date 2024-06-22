@@ -38,7 +38,7 @@ const FoodForm = ({ isUpdate, detailFormData }) => {
                 }
             }
         )
-        resp.data.code === "200" && router.reload();
+        isUpdate && resp.data.code === "200" ? router.reload() : router.push("/");
     }
 
     return (
@@ -68,7 +68,7 @@ const FoodForm = ({ isUpdate, detailFormData }) => {
                     className="flex px-3 py-1 m-2 rounded-md text-slate-900"
                     placeholder="Bahan"
                 />
-                <button type="submit" className="px-4 py-1 m-2 bg-green-500 rounded-md w-fit">
+                <button type="submit" className="px-4 py-1 m-2 bg-teal-600 rounded-md hover:bg-teal-700 w-fit">
                     {isUpdate ? "Update" : "Create"}
                 </button>
             </form>
