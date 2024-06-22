@@ -7,6 +7,19 @@ const FoodForm = ({ isUpdate, detailFormData }) => {
     const router = useRouter();
     const [formData, setFormData] = useState(detailFormData || { name: "", imageUrl: "", description: "", ingredients: [] });
 
+    const handleDelete = async () => {
+        const apiDelete = `https://api-bootcamp.do.dibimbing.id/api/v1/delete-food/${router.query.id}`;
+        const resp = await axios.delete(apiDelete, {
+            headers: {
+                apiKey: "w05KkI9AWhKxzvPFtXotUva-",
+                "Content-Type": "application/json",
+                Authorization:
+                    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pZnRhaGZhcmhhbkBnbWFpbC5jb20iLCJ1c2VySWQiOiJjYTIzZDdjYy02Njk1LTQzNGItODE2Yy03ZTlhNWMwNGMxNjQiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2NjE4NzUzMjF9.wV2OECzC25qNujtyb9YHyzYIbYEV-wud3TQsYv7oB4Q",
+            }
+        });
+        resp.data.code === "200" && router.push("/");
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const apiUpdate = `https://api-bootcamp.do.dibimbing.id/api/v1/update-food/${router.query.id}`;
@@ -43,7 +56,7 @@ const FoodForm = ({ isUpdate, detailFormData }) => {
 
     return (
         <div className="w-full">
-            <form onSubmit={handleSubmit} className="flex flex-col m-5">
+            <div className="flex flex-col m-5">
                 <input
                     value={formData.name}
                     onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
@@ -68,10 +81,13 @@ const FoodForm = ({ isUpdate, detailFormData }) => {
                     className="flex px-3 py-1 m-2 rounded-md text-slate-900"
                     placeholder="Bahan"
                 />
-                <button type="submit" className="px-4 py-1 m-2 bg-teal-600 rounded-md hover:bg-teal-700 w-fit">
-                    {isUpdate ? "Update" : "Create"}
-                </button>
-            </form>
+                <div className="flex">
+                    <button onClick={handleSubmit} className="px-4 py-1 m-2 bg-teal-600 rounded-md hover:bg-teal-700 w-fit">
+                        {isUpdate ? "Update" : "Create"}
+                    </button>
+                    <button onClick={handleDelete} className={`px-4 py-1 m-2 rounded-md bg-rose-600 hover:bg-rose-700 w-fit ${isUpdate ? '' : 'hidden'}`}>Delete</button>
+                </div>
+            </div>
         </div>
     )
 }
